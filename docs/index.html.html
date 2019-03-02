@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>location tracking</title>
+  </head>
+  <body>
+    <div class="location">
+      my location is: <span id="myLocation"></span>
+    </div>
+
+    <script type="text/javascript">
+        var id, target, options;
+
+    function success(pos) {
+      var crd = pos.coords;
+      document.querySelector("#myLocation").innerHTML = crd.latitude + ", " + crd.longitude;
+    }
+
+    function error(err) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    }
+
+
+    options = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 0
+    };
+  
+    id = navigator.geolocation.watchPosition(success, error, options);
+    </script>
+  </body>
+
+</html>
