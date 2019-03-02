@@ -45,6 +45,7 @@
         console.log(crd.latitude, crd.longitude);
         var dt = new Date();
         if(dt.getTime() - lastTimeStamp >= LIMIT){
+          alert('its time')
           lastTimeStamp = dt.getTime();
           fetch('https://availo-api.herokuapp.com/coords', {
             method: 'PATCH',
