@@ -12,41 +12,52 @@
     <script type="text/javascript">
         var id1, target, options;
         var lastTimeStamp;
-        var LIMIT = 1000 * 120;
-        var id = '5c7a2a256f524b002450d5ea'; // TODO: put id here
+        var LIMIT = 1000 * 30;
+        var id = '5c7a27a26f524b002450d5e8'; // TODO: put id here
     function success(pos) {
       var crd = pos.coords;
+      document.querySelector('#myLocation').innerHTML = crd.latitude + ", " + crd.longitude;
       if(typeof lastTimeStamp === 'undefined'){ // no last timestamp
+        lastTimeStamp = new Date().getTime();
+        console.log(typeof crd.latitude, crd.longitude);
         fetch('https://availo-api.herokuapp.com/coords', {
           method: 'POST',
-          mode: 'no-cors',
+
           headers: {
             'content-type': 'application/json',
           },
-          body: {
-            _id: id,
-            location: crd
-          }
+          body: JSON.stringify(
+            {
+              _id: id,
+              location: {
+                latitude: crd.latitude,
+                longitude: crd.longitude
+              }
+            }
+        )
         }).then(function(res){
             console.log(res);
         }).catch(function(err){
           console.log(err);
-        })
+        });
       }
       else{
+        console.log(crd.latitude, crd.longitude);
         var dt = new Date();
         if(dt.getTime() - lastTimeStamp >= LIMIT){
           lastTimeStamp = dt.getTime();
           fetch('https://availo-api.herokuapp.com/coords', {
             method: 'PATCH',
-            mode: 'no-cors',
             headers: {
               'content-type': 'application/json',
             },
-            body: {
+            body: JSON.stringify({
               _id: id,
-              location: crd
-            }
+              location: {
+                latitude: crd.latitude,
+                longitude: crd.longitude
+              }
+            })
           }).then(function(res){
               console.log(res);
           }).catch(function(err){
