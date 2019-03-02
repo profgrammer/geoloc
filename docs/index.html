@@ -11,10 +11,47 @@
 
     <script type="text/javascript">
         var id, target, options;
-
+        var lastTimeStamp;
+        const LIMIT = 1000 * 120;
+        const id = 0; // TODO: put id here
     function success(pos) {
       var crd = pos.coords;
-      document.querySelector("#myLocation").innerHTML = crd.latitude + ", " + crd.longitude;
+      if(typeof lastTimeStamp === 'undefined'){ // no last timestamp
+        fetch('https://availo-api.herokuapp.com/coords', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          }
+          body: {
+            _id: id,
+            location: crd
+          }
+        }).then(function(res){
+            console.log(res);
+        }).catch(function(err){
+          console.log(err);
+        })
+      }
+      else{
+        var dt = new Date();
+        if(dt.getTime() - lastTimeStamp >= LIMIT){
+          lastTimeStamp = dt.getTime();
+          fetch('https://availo-api.herokuapp.com/coords', {
+            method: 'PATCH',
+            headers: {
+              'content-type': 'application/json',
+            }
+            body: {
+              _id: id,
+              location: crd
+            }
+          }).then(function(res){
+              console.log(res);
+          }).catch(function(err){
+            console.log(err);
+          })
+        }
+      }
     }
 
     function error(err) {
@@ -23,11 +60,11 @@
 
 
     options = {
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       timeout: 5000,
       maximumAge: 0
     };
-  
+
     id = navigator.geolocation.watchPosition(success, error, options);
     </script>
   </body>
