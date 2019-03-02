@@ -19,6 +19,7 @@
       if(typeof lastTimeStamp === 'undefined'){ // no last timestamp
         fetch('https://availo-api.herokuapp.com/coords', {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'content-type': 'application/json',
           },
@@ -38,6 +39,7 @@
           lastTimeStamp = dt.getTime();
           fetch('https://availo-api.herokuapp.com/coords', {
             method: 'PATCH',
+            mode: 'no-cors',
             headers: {
               'content-type': 'application/json',
             },
